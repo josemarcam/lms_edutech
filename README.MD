@@ -1,4 +1,4 @@
-# TMS Edutech
+# LMS Edutech
 
 Python 3.9.0
 
