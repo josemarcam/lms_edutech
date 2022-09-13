@@ -1,12 +1,12 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from modules.discipline_api.models import (
+from modules.course.models import (
     Discipline,
     Module,
     Lesson
 )
-from modules.discipline_api.serializers import (
+from modules.course.serializers import (
     DisciplineSerializer,
     ModuleSerializer,
     LessonSerializer
@@ -20,9 +20,6 @@ class DisciplineViews(ModelViewSet):
     serializer_class = DisciplineSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
 class ModuleViews(ModelViewSet):
     """
     List all modules, or create a new module.
@@ -32,7 +29,7 @@ class ModuleViews(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save()
 
 class LessonViews(ModelViewSet):
     """
@@ -43,4 +40,4 @@ class LessonViews(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save()

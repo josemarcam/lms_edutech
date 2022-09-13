@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 
 from rest_framework import routers
 
-from modules.discipline_api.views import (
+from modules.course.views import (
     DisciplineViews,
     ModuleViews,
     LessonViews
@@ -16,6 +16,7 @@ from modules.uploader.views import LessonFileViewset
 
 
 router = routers.DefaultRouter()
+# router.register(r'courses', DisciplineViews, basename="courses")
 router.register(r'disciplines', DisciplineViews, basename="disciplines")
 router.register(r'modules', ModuleViews, basename="modules")
 router.register(r'lessons', LessonViews, basename="lessons")
@@ -25,7 +26,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-    # path('disciplines/', include('modules.discipline_api.views'))
+    # path('disciplines/', include('modules.course.views'))
 ]
 
 if settings.DEBUG:

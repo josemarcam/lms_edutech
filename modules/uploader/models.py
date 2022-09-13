@@ -1,6 +1,6 @@
 from django.db import models
 
-from modules.discipline_api.models import Lesson
+from modules.course.models import Lesson
  
 class LessonFile(models.Model):
     

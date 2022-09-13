@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class DisciplineApiConfig(AppConfig):
+class CourseConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'modules.discipline_api'
+    name = 'modules.course'

@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('discipline_api', '0003_alter_discipline_professor'),
+        ('course', '0003_alter_discipline_professor'),
     ]
 
     operations = [
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
                 ('description', models.CharField(blank=True, max_length=255, null=True)),
-                ('discipline', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='modules', to='discipline_api.discipline')),
+                ('discipline', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='modules', to='course.discipline')),
             ],
         ),
         migrations.CreateModel(
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
                 ('description', models.CharField(blank=True, max_length=255, null=True)),
-                ('module', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='lessons', to='discipline_api.module')),
+                ('module', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='lessons', to='course.module')),
             ],
         ),
     ]

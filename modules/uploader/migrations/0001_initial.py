@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('discipline_api', '0004_module_lesson'),
+        ('course', '0004_module_lesson'),
     ]
 
     operations = [
@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('document', models.FileField(max_length=30, upload_to='')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('lessons', models.ManyToManyField(related_name='files', to='discipline_api.lesson')),
+                ('lessons', models.ManyToManyField(related_name='files', to='course.lesson')),
             ],
             options={
                 'verbose_name_plural': 'Drop Boxes',

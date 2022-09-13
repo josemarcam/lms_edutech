@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     # MY MODULES
-    'modules.discipline_api.apps.DisciplineApiConfig',
+    'modules.course.apps.CourseConfig',
     'modules.uploader.apps.UploaderConfig',
     
 ]
