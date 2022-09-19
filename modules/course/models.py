@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
-
 class Discipline(models.Model):
 
     name = models.CharField(max_length=100, blank=False, null=False)
@@ -24,9 +22,6 @@ class Module(models.Model):
     def __str__(self) -> str:
         return self.name 
 
-    def get_studants(self):
-        return self.discipline.studants.all()
-
 class Lesson(models.Model):
 
     name = models.CharField(max_length=100, blank=False, null=False)
@@ -41,7 +36,7 @@ class Course(models.Model):
 
     name = models.CharField(max_length=100, blank=False, null=False)
     description = models.CharField(max_length=255, blank=True, null=True)
-    disciplines = models.ManyToManyField(Discipline, null=True)
+    disciplines = models.ManyToManyField(Discipline, null=True, related_name="courses")
     studants = models.ManyToManyField(User, null=True)
 
     def __str__(self) -> str:

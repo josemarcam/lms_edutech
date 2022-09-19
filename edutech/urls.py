@@ -9,14 +9,15 @@ from rest_framework import routers
 from modules.course.views import (
     DisciplineViews,
     ModuleViews,
-    LessonViews
+    LessonViews,
+    CourseViews
 )
 
 from modules.uploader.views import LessonFileViewset
 
 
 router = routers.DefaultRouter()
-# router.register(r'courses', DisciplineViews, basename="courses")
+router.register(r'courses', CourseViews, basename="courses")
 router.register(r'disciplines', DisciplineViews, basename="disciplines")
 router.register(r'modules', ModuleViews, basename="modules")
 router.register(r'lessons', LessonViews, basename="lessons")

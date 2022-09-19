@@ -1,10 +1,13 @@
 asgiref==3.5.2
 boto3==1.24.70
 botocore==1.27.70
+coverage==6.4.4
 Django==4.1.1
 django-environ==0.9.0
 django-storages==1.13.1
 djangorestframework==3.13.1
+factory-boy==3.2.1
+Faker==14.2.0
 jmespath==1.0.1
 mysqlclient==2.1.1
 python-dateutil==2.8.2

@@ -4,13 +4,23 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from modules.course.models import (
     Discipline,
     Module,
-    Lesson
+    Lesson,
+    Course
 )
 from modules.course.serializers import (
     DisciplineSerializer,
     ModuleSerializer,
-    LessonSerializer
+    LessonSerializer,
+    CourseSerializer
 )
+
+class CourseViews(ModelViewSet):
+    """
+    List all disciplines, or create a new discipline.
+    """
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class DisciplineViews(ModelViewSet):
     """
@@ -28,9 +38,6 @@ class ModuleViews(ModelViewSet):
     serializer_class = ModuleSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save()
-
 class LessonViews(ModelViewSet):
     """
     List all Lessons, or create a new lesson.
@@ -38,6 +45,3 @@ class LessonViews(ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save()
