@@ -4,7 +4,7 @@ from rest_framework.serializers import (
     CharField,
     SlugRelatedField
 )
-from django.contrib.auth.models import User
+from modules.user.models import customUser as User
 
 from modules.course.models import (
     Course,

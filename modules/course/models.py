@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from modules.user.models import customUser as User
 
 class Discipline(models.Model):
 
@@ -10,7 +10,7 @@ class Discipline(models.Model):
     professor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='disciplines', null=True)
     
     def __str__(self) -> str:
-        return self.name 
+        return self.name
 
 class Module(models.Model):
 
@@ -20,7 +20,7 @@ class Module(models.Model):
     discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, related_name="modules",null=True)
 
     def __str__(self) -> str:
-        return self.name 
+        return self.name
 
 class Lesson(models.Model):
 

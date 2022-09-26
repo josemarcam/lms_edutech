@@ -7,6 +7,7 @@ from modules.course.models import (
     Lesson,
     Course
 )
+from modules.course.permissions import IsAdminOrReadyOnly
 from modules.course.serializers import (
     DisciplineSerializer,
     ModuleSerializer,
@@ -14,13 +15,14 @@ from modules.course.serializers import (
     CourseSerializer
 )
 
+
 class CourseViews(ModelViewSet):
     """
-    List all disciplines, or create a new discipline.
+    List all courses, or create a new discipline.
     """
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadyOnly]
 
 class DisciplineViews(ModelViewSet):
     """

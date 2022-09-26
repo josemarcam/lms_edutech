@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from modules.user.models import customUser as User
 from rest_framework.test import force_authenticate, APIRequestFactory
 from modules.course.factories.discipline import DisciplineFactory
 from modules.course.factories.module import ModuleFactory

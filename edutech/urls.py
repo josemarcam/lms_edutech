@@ -14,6 +14,7 @@ from modules.course.views import (
 )
 
 from modules.uploader.views import LessonFileViewset
+from modules.user.views import UsersViews
 
 
 router = routers.DefaultRouter()
@@ -22,6 +23,9 @@ router.register(r'disciplines', DisciplineViews, basename="disciplines")
 router.register(r'modules', ModuleViews, basename="modules")
 router.register(r'lessons', LessonViews, basename="lessons")
 router.register(r'lesson_files', LessonFileViewset, basename="lesson_files")
+
+router.register(r'users', UsersViews, basename="users")
+
 
 urlpatterns = [
     path('', include(router.urls)),

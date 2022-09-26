@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # MY MODULES
     'modules.course.apps.CourseConfig',
     'modules.uploader.apps.UploaderConfig',
+    'modules.user.apps.UserConfig',
     
 ]
 
@@ -80,6 +81,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'edutech.wsgi.application'
+
+AUTH_USER_MODEL = 'user.customUser'
 
 
 # Database
