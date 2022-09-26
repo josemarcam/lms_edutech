@@ -7,7 +7,7 @@ from modules.course.models import (
     Lesson,
     Course
 )
-from modules.course.permissions import IsAdminOrReadyOnly
+from modules.shared.permissions.custom_permission import IsAdminOrReadyOnly
 from modules.course.serializers import (
     DisciplineSerializer,
     ModuleSerializer,
@@ -30,7 +30,7 @@ class DisciplineViews(ModelViewSet):
     """
     queryset = Discipline.objects.all()
     serializer_class = DisciplineSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadyOnly]
 
 class ModuleViews(ModelViewSet):
     """
@@ -38,7 +38,7 @@ class ModuleViews(ModelViewSet):
     """
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadyOnly]
 
 class LessonViews(ModelViewSet):
     """
@@ -46,4 +46,4 @@ class LessonViews(ModelViewSet):
     """
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadyOnly]

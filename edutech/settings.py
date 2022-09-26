@@ -82,7 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'edutech.wsgi.application'
 
-AUTH_USER_MODEL = 'user.customUser'
+AUTH_USER_MODEL = 'user.CustomUser'
 
 
 # Database

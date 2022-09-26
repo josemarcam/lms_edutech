@@ -4,7 +4,7 @@ from rest_framework.serializers import (
     CharField,
     SlugRelatedField
 )
-from modules.user.models import customUser as User
+from modules.user.models import CustomUser as User
 
 from modules.course.models import (
     Course,
