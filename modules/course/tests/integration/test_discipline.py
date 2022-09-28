@@ -1,4 +1,6 @@
 from django.test import TestCase
+from modules.course.factories.course import CourseFactory
+from modules.user.factories.institution import InstitutionFactory
 from modules.user.models import CustomUser as User
 from rest_framework.test import force_authenticate, APIRequestFactory
 from modules.course.factories.discipline import DisciplineFactory
@@ -16,12 +18,17 @@ class DisciplineTestCase(TestCase):
     def test_create_discipline(self):
         
         factory = APIRequestFactory()
-        user = User.objects.create_user('username', 'Pas$w0rd')
+        institution = InstitutionFactory()
+        course = CourseFactory(institution=institution)
+
+        user = User.objects.create_user('username', 'Pas$w0rd', institution=institution)
+       
         payload = {
             "name": "lesson testt",
             "workload": 40,
             "description": "esse é só um test",
-            "professor": user.username
+            "professor": user.username,
+            "courses":[course.id]
         }
 
 
@@ -59,8 +66,11 @@ class DisciplineTestCase(TestCase):
     def test_update_discipline(self):
         
         factory = APIRequestFactory()
-        discipline = DisciplineFactory()
-        user = User.objects.create_user('username', 'Pas$w0rd')
+        institution = InstitutionFactory()
+        course = CourseFactory(institution=institution)
+        discipline = DisciplineFactory(courses=[course])
+
+        user = User.objects.create_user('username', 'Pas$w0rd', institution=institution)
         # print(f"nome do bagulho -> {discipline.name}")
          
         payload = {
@@ -68,7 +78,8 @@ class DisciplineTestCase(TestCase):
             "name": "lesson testt",
             "workload": 40,
             "description": "esse é só um test",
-            "professor": None
+            "professor": None,
+            "courses": [course.id]
         }
 
         view = DisciplineViews.as_view({"put": "update"})

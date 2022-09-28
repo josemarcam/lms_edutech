@@ -2,9 +2,10 @@ from rest_framework.serializers import (
     Serializer,
     IntegerField,
     CharField,
-    SlugRelatedField
+    SlugRelatedField,
+    ValidationError
 )
-from modules.user.models import CustomUser as User
+from modules.user.models import CustomUser as User, Institution
 
 from modules.course.models import (
     Course,
@@ -13,14 +14,27 @@ from modules.course.models import (
     Lesson
 )
 
+class InstitutionSerializerField(SlugRelatedField):
+    def __init__(self, slug_field=None, object_attr="institution", **kwargs):
+        self.object_attr = object_attr
+        super().__init__(slug_field, **kwargs)
+    
+    def get_queryset(self):
+        queryset = self.queryset
+        object_attr = self.object_attr
+        request = self.context.get('request', None)
+        queryset = queryset.filter(**{object_attr: request.user.institution})
+        return queryset
+
+
 class DisciplineSerializer(Serializer):
     
     id = IntegerField(read_only=True)
     name = CharField(required=True, allow_blank=False, max_length=100)
     workload = IntegerField(required=True)
     description = CharField(required=False, allow_blank=True, max_length=255)
-    professor = SlugRelatedField(many=False, slug_field=User.USERNAME_FIELD, read_only=False, queryset=User.objects.all(), allow_null=True)
-    courses = SlugRelatedField(many=True, slug_field="id", read_only=True)
+    professor = InstitutionSerializerField(many=False, slug_field=User.USERNAME_FIELD, read_only=False, queryset=User.objects.all(), allow_null=True)
+    courses = InstitutionSerializerField(many=True, slug_field="id", read_only=False, queryset=Course.objects.all())
 
     modules = SlugRelatedField(many=True, slug_field="name", read_only=True)
 
@@ -28,7 +42,21 @@ class DisciplineSerializer(Serializer):
         """
         Create and return a new `Discipline` instance, given the validated data.
         """
+        courses = validated_data.get("courses")
+        user_institution = validated_data.get("institution")
+        
+        del validated_data['courses']
+        del validated_data['institution']
+
+
+        # for course in courses:
+        #     if course.institution != user_institution:
+        #         raise ValidationError(f"Curso selecionado não existe: {course.id}")
+
+
         instance : Discipline = Discipline.objects.create(**validated_data)
+
+        instance.courses.set(courses)
         return instance
 
     def update(self, instance, validated_data):
@@ -45,8 +73,8 @@ class ModuleSerializer(Serializer):
     name = CharField(required=True, allow_blank=False, max_length=100)
     description = CharField(required=False, allow_blank=True, max_length=255)
 
-    discipline = SlugRelatedField(many=False, slug_field="id", read_only=False, queryset=Discipline.objects.all(), allow_null=True)
-    lessons = SlugRelatedField(many=True, slug_field="id", read_only=True)
+    discipline = InstitutionSerializerField(many=False, slug_field="id", read_only=False, queryset=Discipline.objects.all(), allow_null=True, object_attr="courses__institution")
+    lessons = InstitutionSerializerField(many=True, slug_field="id", read_only=True, object_attr="module__discipline__courses__institution")
 
 
     def create(self, validated_data):
@@ -70,7 +98,7 @@ class LessonSerializer(Serializer):
     name = CharField(required=True, allow_blank=False, max_length=100)
     description = CharField(required=False, allow_blank=True, max_length=255)
 
-    module = SlugRelatedField(many=False, slug_field="id", read_only=False, queryset=Module.objects.all(), allow_null=True)
+    module = InstitutionSerializerField(many=False, slug_field="id", read_only=False, queryset=Module.objects.all(), allow_null=True, object_attr="discipline__courses__institution")
     files = SlugRelatedField(many=True, slug_field="document", read_only=True)
 
     def create(self, validated_data):
@@ -93,8 +121,9 @@ class CourseSerializer(Serializer):
     id = IntegerField(read_only=True)
     name = CharField(required=True, allow_blank=False, max_length=100)
     description = CharField(required=False, allow_blank=True, max_length=255)
-    studants = SlugRelatedField(many=True, slug_field=User.USERNAME_FIELD, read_only=False, queryset=User.objects.all())
-    disciplines = SlugRelatedField(many=True, slug_field="id", read_only=False, queryset=Discipline.objects.all())
+    studants = InstitutionSerializerField(many=True, slug_field=User.USERNAME_FIELD, read_only=False, queryset=User.objects.all())
+    disciplines = InstitutionSerializerField(many=True, slug_field="id", read_only=False, queryset=Discipline.objects.all(), object_attr="courses__institution")
+    institution = SlugRelatedField(many=False, slug_field="id", read_only=True)
 
     # modules = SlugRelatedField(many=True, slug_field="name", read_only=True)
 
@@ -108,7 +137,9 @@ class CourseSerializer(Serializer):
         del validated_data['studants']
         del validated_data['disciplines']
         
+        
         instance : Course = Course.objects.create(**validated_data)
+
         instance.studants.set(studants)
         instance.disciplines.set(disciplines)
         return instance

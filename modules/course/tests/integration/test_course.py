@@ -1,4 +1,5 @@
 from django.test import TestCase
+from modules.user.factories.institution import InstitutionFactory
 from modules.user.models import CustomUser as User
 from rest_framework.test import force_authenticate, APIRequestFactory
 from modules.course.factories.discipline import DisciplineFactory
@@ -23,7 +24,10 @@ class CourseTestCase(TestCase):
             "studants": [],
             "disciplines": [],
         }
-        user = User.objects.create_user('username', 'Pas$w0rd')
+
+        institution = InstitutionFactory()
+
+        user = User.objects.create_user('username', 'Pas$w0rd', institution=institution)
 
         view = CourseViews.as_view({"post": "create"})
 
@@ -68,7 +72,10 @@ class CourseTestCase(TestCase):
             "studants": [],
             "disciplines": [discipline.id],
         }
-        user = User.objects.create_user('username', 'Pas$w0rd')
+
+        institution = InstitutionFactory()
+
+        user = User.objects.create_user('username', 'Pas$w0rd', institution=institution)
 
         view = CourseViews.as_view({"post": "create"})
 
@@ -80,16 +87,18 @@ class CourseTestCase(TestCase):
         course_count = Course.objects.all().count()
         course = Course.objects.all()
 
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(course_count, 1)
-        self.assertEqual(course[0].disciplines.all()[0].id, discipline.id)
+        # print(response.data['disciplines'][0].code)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['disciplines'][0].code, "does_not_exist")
+        
         
     
     def test_update_course(self):
         
         factory = APIRequestFactory()
-        course = CourseFactory()
-        # print(f"nome do bagulho -> {course.name}")
+        institution = InstitutionFactory()
+        course = CourseFactory(institution=institution)
          
         payload = {
             "id": course.id,
@@ -98,8 +107,8 @@ class CourseTestCase(TestCase):
             "studants": [],
             "disciplines": []
         }
-        user = User.objects.create_user('username', 'Pas$w0rd')
 
+        user = User.objects.create_user('username', 'Pas$w0rd', institution=institution)
         view = CourseViews.as_view({"put": "update"})
 
         request = factory.put(f'/courses/{course.id}', data=payload, format="json")
@@ -108,6 +117,8 @@ class CourseTestCase(TestCase):
         force_authenticate(request, user=user)
         response = view(request, pk=course.id)
         course_updated = Course.objects.all()
+        # print(response.data)
+
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(course_updated[0].name, payload["name"])

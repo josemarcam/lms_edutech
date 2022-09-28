@@ -8,6 +8,8 @@ class Institution(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
 
 class CustomUser(AbstractUser):
     
@@ -21,4 +23,3 @@ class CustomUser(AbstractUser):
                   default=1)
     
     institution = models.ForeignKey(Institution,on_delete=models.CASCADE, related_name="users")
-

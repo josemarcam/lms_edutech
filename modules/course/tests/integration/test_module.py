@@ -1,4 +1,6 @@
 from django.test import TestCase
+from modules.course.factories.course import CourseFactory
+from modules.user.factories.institution import InstitutionFactory
 from modules.user.models import CustomUser as User
 from rest_framework.test import force_authenticate, APIRequestFactory
 from modules.course.factories.discipline import DisciplineFactory
@@ -16,8 +18,11 @@ class ModuleTestCase(TestCase):
     def test_create_module(self):
         
         factory = APIRequestFactory()
-        user = User.objects.create_user('username', 'Pas$w0rd')
-        discipline = DisciplineFactory()
+        institution = InstitutionFactory()
+        course = CourseFactory(institution=institution)
+        discipline = DisciplineFactory(courses=[course])
+
+        user = User.objects.create_user('username', 'Pas$w0rd', institution=institution)
 
         payload = {
             "name": "lesson testt",
@@ -61,8 +66,12 @@ class ModuleTestCase(TestCase):
     def test_update_module(self):
         
         factory = APIRequestFactory()
-        module = ModuleFactory()
-        user = User.objects.create_user('username', 'Pas$w0rd')
+        institution = InstitutionFactory()
+        course = CourseFactory(institution=institution)
+        discipline = DisciplineFactory(courses=[course])
+        module = ModuleFactory(discipline=discipline)
+
+        user = User.objects.create_user('username', 'Pas$w0rd', institution=institution)
         
         # print(f"nome do bagulho -> {module.name}")
          
@@ -70,7 +79,7 @@ class ModuleTestCase(TestCase):
             "id": module.id,
             "name": "lesson testt",
             "description": "esse é só um test",
-            "discipline": None
+            "discipline": discipline.id
         }
 
         view = ModuleViews.as_view({"put": "update"})

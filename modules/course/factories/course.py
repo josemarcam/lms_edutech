@@ -2,7 +2,9 @@ import factory
 from factory.django import DjangoModelFactory
 from random import randint
 from modules.course.models import Course
-from factory import Faker
+from factory import Faker, SubFactory
+
+from modules.user.factories.institution import InstitutionFactory
 
 
 class CourseFactory(DjangoModelFactory):
@@ -12,6 +14,7 @@ class CourseFactory(DjangoModelFactory):
 
     name = "trest"
     description = Faker("paragraph")
+    institution = SubFactory(InstitutionFactory)
 
     @factory.post_generation
     def disciplines(self, create, extracted, **kwargs):

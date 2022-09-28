@@ -16,3 +16,11 @@ Python 3.9.0
     #Rodando o Projeto
     python manage.py runserver
 
+# Rodando os testes
+
+    #Teste DRF
+    python manage.py test
+
+    #coverage e relatório html
+    coverage run manage.py test && coverage html # o caminho para o relatório é ./htmlcov/index.html
+

@@ -20,9 +20,18 @@ class CourseViews(ModelViewSet):
     """
     List all courses, or create a new discipline.
     """
-    queryset = Course.objects.all()
+    # queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [IsAdminOrReadyOnly]
+
+    def get_queryset(self):
+        institution = self.request.user.institution
+        print(institution)
+        return Course.objects.filter(institution = self.request.user.institution.id)
+
+    def perform_create(self, serializer):
+        serializer.save(institution=self.request.user.institution)
+    
 
 class DisciplineViews(ModelViewSet):
     """
@@ -31,6 +40,14 @@ class DisciplineViews(ModelViewSet):
     queryset = Discipline.objects.all()
     serializer_class = DisciplineSerializer
     permission_classes = [IsAdminOrReadyOnly]
+    
+    def get_queryset(self):
+        institution = self.request.user.institution
+        print(institution)
+        return Discipline.objects.filter(courses__institution = self.request.user.institution.id)
+    
+    def perform_create(self, serializer):
+        serializer.save(institution=self.request.user.institution)
 
 class ModuleViews(ModelViewSet):
     """
