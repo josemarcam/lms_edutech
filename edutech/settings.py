@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'modules.course.apps.CourseConfig',
     'modules.uploader.apps.UploaderConfig',
     'modules.user.apps.UserConfig',
+    'modules.exam.apps.ExamConfig',
     
 ]
 

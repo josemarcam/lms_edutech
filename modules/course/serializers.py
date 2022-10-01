@@ -1,3 +1,4 @@
+from sys import modules
 from rest_framework.serializers import (
     Serializer,
     IntegerField,
@@ -5,26 +6,15 @@ from rest_framework.serializers import (
     SlugRelatedField,
     ValidationError
 )
-from modules.user.models import CustomUser as User, Institution
-
+from modules.shared.serializer_field.studant import UserLevelSerializerField
+from modules.user.models import CustomUser as User
+from modules.shared.serializer_field.institution import InstitutionSerializerField
 from modules.course.models import (
     Course,
     Discipline,
     Module,
     Lesson
 )
-
-class InstitutionSerializerField(SlugRelatedField):
-    def __init__(self, slug_field=None, object_attr="institution", **kwargs):
-        self.object_attr = object_attr
-        super().__init__(slug_field, **kwargs)
-    
-    def get_queryset(self):
-        queryset = self.queryset
-        object_attr = self.object_attr
-        request = self.context.get('request', None)
-        queryset = queryset.filter(**{object_attr: request.user.institution})
-        return queryset
 
 
 class DisciplineSerializer(Serializer):
@@ -33,7 +23,7 @@ class DisciplineSerializer(Serializer):
     name = CharField(required=True, allow_blank=False, max_length=100)
     workload = IntegerField(required=True)
     description = CharField(required=False, allow_blank=True, max_length=255)
-    professor = InstitutionSerializerField(many=False, slug_field=User.USERNAME_FIELD, read_only=False, queryset=User.objects.all(), allow_null=True)
+    professor = UserLevelSerializerField(many=False, slug_field=User.USERNAME_FIELD, read_only=False, queryset=User.objects.all(), allow_null=True, user_level=User.USER_LEVEL[1][0])
     courses = InstitutionSerializerField(many=True, slug_field="id", read_only=False, queryset=Course.objects.all())
 
     modules = SlugRelatedField(many=True, slug_field="name", read_only=True)
@@ -121,7 +111,7 @@ class CourseSerializer(Serializer):
     id = IntegerField(read_only=True)
     name = CharField(required=True, allow_blank=False, max_length=100)
     description = CharField(required=False, allow_blank=True, max_length=255)
-    studants = InstitutionSerializerField(many=True, slug_field=User.USERNAME_FIELD, read_only=False, queryset=User.objects.all())
+    studants = UserLevelSerializerField(many=True, slug_field=User.USERNAME_FIELD, read_only=False, queryset=User.objects.all())
     disciplines = InstitutionSerializerField(many=True, slug_field="id", read_only=False, queryset=Discipline.objects.all(), object_attr="courses__institution")
     institution = SlugRelatedField(many=False, slug_field="id", read_only=True)
 

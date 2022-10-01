@@ -32,7 +32,6 @@ class Lesson(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name="lessons")
 
     
-    
     def __str__(self) -> str:
         return self.name
 

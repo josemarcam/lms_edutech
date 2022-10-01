@@ -21,13 +21,14 @@ class DisciplineTestCase(TestCase):
         institution = InstitutionFactory()
         course = CourseFactory(institution=institution)
 
-        user = User.objects.create_user('username', 'Pas$w0rd', institution=institution)
-       
+        user = User.objects.create_user('username', 'Pas$w0rd', institution=institution, user_level=User.USER_LEVEL[0][0])
+        professor = User.objects.create_user('professor', 'Pas$w0rd', institution=institution, user_level=User.USER_LEVEL[1][0])
+
         payload = {
             "name": "lesson testt",
             "workload": 40,
             "description": "esse é só um test",
-            "professor": user.username,
+            "professor": professor.username,
             "courses":[course.id]
         }
 
