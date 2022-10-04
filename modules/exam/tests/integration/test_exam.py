@@ -1,9 +1,8 @@
 from django.test import TestCase
 from rest_framework.test import force_authenticate, APIRequestFactory
 from modules.exam.factories.exam import ExamFactory
-from modules.exam.factories.exercise import ExerciseFactory
-from modules.exam.models import Exam, Exercise
-from modules.exam.views import ExamViews, ExerciseViews
+from modules.exam.models import Exam
+from modules.exam.views import ExamViews
 from modules.user.factories.course_class import CourseClassFactory
 
 

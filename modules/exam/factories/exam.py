@@ -1,7 +1,6 @@
 import factory
 from factory.django import DjangoModelFactory
-from random import randint
-from factory import Faker, SubFactory
+from factory import SubFactory
 
 from modules.exam.models import Exam
 from modules.user.factories.course_class import CourseClassFactory

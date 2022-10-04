@@ -1,10 +1,8 @@
 from random import randint
 from factory.django import DjangoModelFactory
-from factory import Faker, SubFactory, RelatedFactory, Dict
+from factory import Faker, Dict
 
 from modules.exam.models import Exercise
-from modules.user.factories.course_class import CourseClassFactory
-from modules.user.factories.institution import InstitutionFactory
 
 class ExerciseFactory(DjangoModelFactory):
     

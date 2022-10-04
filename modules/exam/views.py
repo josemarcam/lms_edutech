@@ -27,6 +27,7 @@ class ExamViews(ModelViewSet):
         assignment = AssignExam.objects.filter(user=user, source_exam=source_exam)
         if not assignment:
             assignment = AssignExam.objects.create(exam=user_exam, user=user, source_exam=source_exam)
+            # TODO: think of some other stuff to do in this case
         
         serializer = self.serializer_class(user_exam)
         return Response(serializer.data)        
@@ -42,7 +43,6 @@ class ExamViews(ModelViewSet):
                 classes_id.append(course_class.id)
             
             return Exam.objects.filter(institution = self.request.user.institution.id, course_class__in=classes_id)
-            # return Exam.objects.filter(institution = self.request.user.institution.id)
         
         return Exam.objects.filter(institution = self.request.user.institution.id)
 

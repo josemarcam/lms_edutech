@@ -21,6 +21,11 @@ class InstitutionViews(ModelViewSet):
     serializer_class = InstitutionSerializer
     permission_classes = [IsAdminUser]
 
+    def get_queryset(self):
+        user : User = self.request.user
+
+        return Institution.objects.filter(id=user.institution.id)
+
 class CourseClassViews(ModelViewSet):
     """
     List all courses, or create a new discipline.
