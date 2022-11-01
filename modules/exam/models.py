@@ -15,6 +15,9 @@ class Exam(models.Model):
         count_exams = len(children)
         exam_index = randint(0, count_exams -1)
         return children[exam_index]
+    
+    def is_main(self) -> bool:
+        return not bool(self.exam_id)
 
 class Exercise(models.Model):
 
@@ -28,10 +31,41 @@ class AssignExam(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    done = models.BooleanField(default=False)
+    score = models.IntegerField(null=True)
     
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name="assignments", null=False)
     source_exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name="source_assignments", null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="assignments", null=False)
+    #TODO: fazer final_score e final_percent
+
+    def get_final_score(self) -> int:
+        
+        exam_exercises = self.exam.exercises.all()
+        right_aswers = 0
+        total_aswers = len(exam_exercises)
+        studant_assign_aswers = AssignAswer.objects.filter(assign=self.id)
+        
+        for exercise in exam_exercises:
+            
+            studant_aswer = studant_assign_aswers.filter(exercise=exercise).first()
+            if exercise.answer == studant_aswer.answer:
+                right_aswers += 1
+
+        final_score = (right_aswers/total_aswers) * 100
+
+        return final_score
+    
+    def finalize(self) -> bool:
+
+        score = self.get_final_score()
+        self.score = score
+        self.done = True
+        self.save()
+        return True
+
+        
+
 
 class AssignAswer(models.Model):
 

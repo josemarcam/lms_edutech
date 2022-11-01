@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from modules.user.models import CourseClass, CustomUser as User, Institution
 from modules.user.serializers import CourseClassSerializer, InstitutionSerializer, UserSerializer
-from modules.shared.permissions.custom_permission import AtLeastProfessorPermission, IsAdminOrReadyOnly
+from modules.shared.permissions.custom_permission import AtLeastProfessorOrClassCoursePermission, IsAdminOrReadyOnly
 from rest_framework.permissions import IsAdminUser
 
 
@@ -32,7 +32,7 @@ class CourseClassViews(ModelViewSet):
     """
     # queryset = Course.objects.all()
     serializer_class = CourseClassSerializer
-    permission_classes = [AtLeastProfessorPermission]
+    permission_classes = [AtLeastProfessorOrClassCoursePermission]
 
     def get_queryset(self):
         return CourseClass.objects.filter(institution = self.request.user.institution.id)

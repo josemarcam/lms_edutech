@@ -123,13 +123,12 @@ class ExamTestCase(TestCase):
         
         exam = ExamFactory(institution=institution, course_class=course_class)
 
-        view = ExamViews.as_view({"get": "assign"})
+        view = ExamViews.as_view({"get": "retrieve"})
 
-        request = factory.get('/exams/')
+        request = factory.get(f'/exams/{exam.id}/assign')
         force_authenticate(request, user=user)
 
         response = view(request, pk=exam.id)
-        # print(response.data)
         
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["id"], exam.id)

@@ -55,7 +55,7 @@ class IsAdminOrReadyOnlyTestCase(TestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class AtLeastProfessorPermissionTestCase(TestCase):
+class AtLeastProfessorOrClassCoursePermissionTestCase(TestCase):
 
     def test_is_admin(self):
 

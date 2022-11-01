@@ -4,26 +4,35 @@ Python 3.9.0
 
 ## Pré-requisitos
 
-    #Preencher .env
-    preencha as váriaveis no .env.example e retire o .example do arquivo
+```
+#Preencher .env
+preencha as váriaveis no .env.example e retire o .example do arquivo
+
+#Crie o Virtual Enviroment
+python -m venv venv
+```
+
+Ative o Virtual Enviroment:
+* Windows
+    ```sh
+    ./venv/Scripts/activate.bat
+    ```
+* Unix
+    ```sh
+    source venv/bin/activate
+    ```
     
-    #Instalando dependencias
-    pip install -r requirements.txt
+```
+#Instale as dependencias
+pip install -r requirements.txt
 
-    #Rodando migrations
-    python manage.py migrate
+#Rode migrations
+python manage.py migrate
 
-    #Rodando o Projeto
-    python manage.py runserver
-
-# Rodando os testes
-
-    #Teste DRF
-    python manage.py test
-
-    #coverage e relatório html
-    coverage run manage.py test && coverage html # o caminho para o relatório é ./htmlcov/index.html
-
+#Rode o Projeto
+python manage.py runserver # certifique-se de ter criado o seu primeiro usuario
+```
+    
 # Criando Primeiro Usuario
 
     #Entrar no shell django
@@ -41,3 +50,10 @@ Python 3.9.0
     #Sair do shell
     exit() #ou Crt + d
 
+# Rodando os testes
+
+    #Teste DRF
+    python manage.py test
+
+    #coverage e relatório html
+    coverage run manage.py test && coverage html # o caminho para o relatório é ./htmlcov/index.html
