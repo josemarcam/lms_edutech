@@ -129,4 +129,4 @@ class AtLeastProfessorOrClassCoursePermissionTestCase(TestCase):
         response = view(request,pk=course_class.id)
         # print(response.data)
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)

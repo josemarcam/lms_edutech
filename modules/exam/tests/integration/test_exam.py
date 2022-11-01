@@ -60,7 +60,7 @@ class ExamTestCase(TestCase):
         force_authenticate(request)
         response = view(request)
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
     
     def test_create_exam_with_children(self):
         

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class Institution(models.Model):
 
@@ -25,6 +25,11 @@ class CustomUser(AbstractUser):
                   default=1)
     
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name="users")
+
+    def get_jwt(self):
+        refresh = RefreshToken.for_user(self)
+
+        return str(refresh.access_token)
 
     # REQUIRED_FIELDS = ['institution']
 

@@ -59,7 +59,7 @@ class CourseTestCase(TestCase):
         force_authenticate(request)
         response = view(request)
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
     
     def test_create_course_with_disciplines(self):
         
